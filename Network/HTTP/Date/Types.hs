@@ -1,0 +1,25 @@
+module Network.HTTP.Date.Types (
+    HTTPDate
+  , hdYear
+  , hdMonth
+  , hdDay
+  , hdHour
+  , hdMinute
+  , hdSecond
+  , hdWkday
+  , defaultHTTPDate
+  ) where
+
+data HTTPDate = HTTPDate {
+    hdYear   :: !Int
+  , hdMonth  :: !Int
+  , hdDay    :: !Int
+  , hdHour   :: !Int
+  , hdMinute :: !Int
+  , hdSecond :: !Int
+  , hdWkday  :: !Int
+  } deriving (Eq,Show)
+
+-- 1970/1/1 is Thu (4)
+defaultHTTPDate :: HTTPDate
+defaultHTTPDate = HTTPDate 1970 1 1 0 0 0 4
