@@ -14,8 +14,7 @@ formatHTTPDate :: HTTPDate -> ByteString
 formatHTTPDate hd = BS.concat [
       week, ", "
     , day, " ", month, " ", year, " "
-    , hh, ":", mm, ":", ss, " "
-    , "GMT"
+    , hh, ":", mm, ":", ss, " GMT"
     ]
   where
     y = hdYear hd
