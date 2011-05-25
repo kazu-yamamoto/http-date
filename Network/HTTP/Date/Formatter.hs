@@ -14,7 +14,7 @@ import Network.HTTP.Date.Types
 ----------------------------------------------------------------
 
 formatHTTPDate :: HTTPDate -> ByteString
-formatHTTPDate hd = do
+formatHTTPDate hd =
     unsafeCreate 29 $ \ptr -> do
         cpy3 ptr week
         poke (ptr `plusPtr`  3) comma
