@@ -6,7 +6,6 @@ License:                BSD3
 License-File:           LICENSE
 Synopsis:               HTTP Date parser/formatter
 Description:            Fast parser and formatter for HTTP Date
-Homepage:               http://www.mew.org/~kazu/
 Category:               Network, Web
 Cabal-Version:          >= 1.6
 Build-Type:             Simple
