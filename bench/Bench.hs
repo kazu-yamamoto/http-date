@@ -4,13 +4,12 @@ import Criterion.Main
 import Data.Time
 import Model
 import Network.HTTP.Date
-import Network.HTTP.Date
 
 main :: IO ()
 main = defaultMain [
     bgroup "format" [
          bench "formatHTTPDate" (whnf formatHTTPDate hd)
-       , bench "utcToDate" (whnf utcToDate utc)
+       , bench "utcToDate" (whnf utcToDate utcd)
        ]
   ]
   where
@@ -23,4 +22,4 @@ main = defaultMain [
       , hdSecond = 20
       , hdWkday  = 6
       }
-    utc = UTCTime (ModifiedJulianDay 51583) 36560
+    utcd = UTCTime (ModifiedJulianDay 51583) 36560
