@@ -16,7 +16,7 @@ library
   else
     GHC-Options:        -Wall
   Exposed-Modules:      Network.HTTP.Date
-                        Network.HTTP.Date.Converter
+  Other-Modules:        Network.HTTP.Date.Converter
                         Network.HTTP.Date.Formatter
                         Network.HTTP.Date.Types
                         Network.HTTP.Date.Parser

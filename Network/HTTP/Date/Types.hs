@@ -10,6 +10,10 @@ module Network.HTTP.Date.Types (
   , defaultHTTPDate
   ) where
 
+{-|
+  Data structure for HTTP Date. This value should be specified
+  with 'defaultHTTPDate' and its field labels.
+-}
 data HTTPDate = HTTPDate {
     hdYear   :: !Int
   , hdMonth  :: !Int
@@ -20,6 +24,9 @@ data HTTPDate = HTTPDate {
   , hdWkday  :: !Int
   } deriving (Eq,Show)
 
+{-|
+  A default value for 'HTTPDate'.
+-}
 -- 1970/1/1 is Thu (4)
 defaultHTTPDate :: HTTPDate
 defaultHTTPDate = HTTPDate 1970 1 1 0 0 0 4

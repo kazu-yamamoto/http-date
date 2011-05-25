@@ -4,6 +4,9 @@ import Data.Word
 import Network.HTTP.Date.Types
 import System.Posix.Types
 
+{-|
+  Translating 'EpochTime' to 'HTTPDate'.
+-}
 epochTimeToHTTPDate :: EpochTime -> HTTPDate
 epochTimeToHTTPDate x = defaultHTTPDate {
     hdYear   = y

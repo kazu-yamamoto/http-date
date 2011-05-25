@@ -1,8 +1,12 @@
+{-|
+  Fast parser and formatter for HTTP Date.
+-}
 module Network.HTTP.Date (
-    module Network.HTTP.Date.Converter
-  , module Network.HTTP.Date.Formatter
-  , module Network.HTTP.Date.Parser
-  , module Network.HTTP.Date.Types
+    module Network.HTTP.Date.Types
+  -- * Utility functions
+  , parseHTTPDate
+  , formatHTTPDate
+  , epochTimeToHTTPDate
   ) where
 
 import Network.HTTP.Date.Converter

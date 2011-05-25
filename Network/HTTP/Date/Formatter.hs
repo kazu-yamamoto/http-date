@@ -13,6 +13,9 @@ import Network.HTTP.Date.Types
 
 ----------------------------------------------------------------
 
+{-|
+  Generating HTTP Date in RFC1123 style.
+-}
 formatHTTPDate :: HTTPDate -> ByteString
 formatHTTPDate hd =
     unsafeCreate 29 $ \ptr -> do
