@@ -29,6 +29,7 @@ test1 = do
         when (m /= o) $ do
             BS.putStr $ "Model: " +++ m +++ "\n"
             BS.putStr $ "Ours : " +++ o +++ "\n"
+            fail "Wrong assertion"
 
 test2 :: IO ()
 test2 = do
@@ -44,3 +45,4 @@ test2 = do
             Just hd' -> when (hd /= hd') $ do
                 putStrLn $ "Model: " ++ show hd
                 putStrLn $ "Ours : " ++ show hd'
+                fail "Wrong assertion"

@@ -2,7 +2,6 @@
 
 module Network.HTTP.Date.Formatter (formatHTTPDate) where
 
-import Data.Array
 import Data.ByteString.Internal
 import Data.ByteString.Char8 ()
 import Data.Word
@@ -19,12 +18,12 @@ import Network.HTTP.Date.Types
 formatHTTPDate :: HTTPDate -> ByteString
 formatHTTPDate hd =
     unsafeCreate 29 $ \ptr -> do
-        cpy3 ptr week
+        cpy3 ptr weekDays (3 * (w - 1))
         poke (ptr `plusPtr`  3) comma
         poke (ptr `plusPtr`  4) spc
         int2 (ptr `plusPtr`  5) d
         poke (ptr `plusPtr`  7) spc
-        cpy3 (ptr `plusPtr`  8) month
+        cpy3 (ptr `plusPtr`  8) months (3 * (m - 1))
         poke (ptr `plusPtr` 11) spc
         int4 (ptr `plusPtr` 12) y
         poke (ptr `plusPtr` 16) spc
@@ -45,14 +44,12 @@ formatHTTPDate hd =
     n = hdMinute hd
     s = hdSecond hd
     w = hdWkday hd
-    week = weekDays ! w
-    month = months ! m
+    
+    cpy3 :: Ptr Word8 -> ForeignPtr Word8 -> Int -> IO ()
+    cpy3 ptr p o = withForeignPtr p $ \fp ->
+      memcpy ptr (fp `plusPtr` o) 3
 
 ----------------------------------------------------------------
-
-cpy3 :: Ptr Word8 -> ByteString -> IO ()
-cpy3 ptr (PS p s l) = withForeignPtr p $ \fp ->
-    memcpy ptr (fp `plusPtr` s) (fromIntegral l)
 
 int2 :: Ptr Word8 -> Int -> IO ()
 int2 ptr n
@@ -60,14 +57,14 @@ int2 ptr n
       poke ptr zero
       poke (ptr `plusPtr` 1) (i2w8 n)
   | otherwise = do
-      poke ptr               (i2w8 (n `div` 10))
-      poke (ptr `plusPtr` 1) (i2w8 (n `mod` 10))
+      poke ptr               (i2w8 (n `quot` 10))
+      poke (ptr `plusPtr` 1) (i2w8 (n `rem` 10))
 
 int4 :: Ptr Word8 -> Int -> IO ()
 int4 ptr n0 = do
-    let (n1,x1) = n0 `divMod` 10
-        (n2,x2) = n1 `divMod` 10
-        (x4,x3) = n2 `divMod` 10
+    let (n1,x1) = n0 `quotRem` 10
+        (n2,x2) = n1 `quotRem` 10
+        (x4,x3) = n2 `quotRem` 10
     poke ptr               (i2w8 x4)
     poke (ptr `plusPtr` 1) (i2w8 x3)
     poke (ptr `plusPtr` 2) (i2w8 x2)
@@ -78,18 +75,11 @@ i2w8 n = fromIntegral n + zero
 
 ----------------------------------------------------------------
 
-months :: Array Int ByteString
-months = listArray (1,12) [
-      "Jan", "Feb", "Mar"
-    , "Apr", "May", "Jun"
-    , "Jul", "Aug", "Sep"
-    , "Oct", "Nov", "Dec"
-    ]
+months :: ForeignPtr Word8
+months = let (PS p _ _) = "JanFebMarAprMayJunJulAugSepOctNovDec" in p
 
-weekDays :: Array Int ByteString
-weekDays = listArray (1,7) [
-      "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
-    ]
+weekDays :: ForeignPtr Word8
+weekDays = let (PS p _ _) = "MonTueWedThuFriSatSun" in p
 
 ----------------------------------------------------------------
 

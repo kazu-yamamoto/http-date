@@ -10,6 +10,7 @@ main = defaultMain [
     bgroup "format" [
          bench "formatHTTPDate" (whnf formatHTTPDate hd)
        , bench "utcToDate" (whnf utcToDate utcd)
+       , bench "epochTimeToHTTPDate" (whnf epochTimeToHTTPDate epochTime)
        ]
   ]
   where
@@ -23,3 +24,4 @@ main = defaultMain [
       , hdWkday  = 6
       }
     utcd = UTCTime (ModifiedJulianDay 51583) 36560
+    epochTime = 10000000000
