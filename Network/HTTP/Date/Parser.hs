@@ -2,12 +2,12 @@
 
 module Network.HTTP.Date.Parser (parseHTTPDate) where
 
-import Data.ByteString
-import Network.HTTP.Date.Types
+import Control.Applicative
 import Data.Attoparsec
 import Data.Attoparsec.Char8
-import Control.Applicative
+import Data.ByteString
 import Data.Char
+import Network.HTTP.Date.Types
 
 ----------------------------------------------------------------
 
@@ -55,7 +55,7 @@ date1 = do
     sp
     y <- year
     return (y,m,d)
- where    
+ where
    day = digit2
    year = digit4
 

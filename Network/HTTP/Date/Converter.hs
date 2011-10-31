@@ -1,16 +1,15 @@
 {-# LANGUAGE BangPatterns #-}
 module Network.HTTP.Date.Converter (epochTimeToHTTPDate) where
 
-import Data.Word
-import Network.HTTP.Date.Types
-import System.Posix.Types
-
+import Control.Applicative
 import Data.ByteString.Internal
+import Data.Word
 import Foreign.Marshal.Array
 import Foreign.Ptr
-import Control.Monad(liftM2)
 import Foreign.Storable
-import System.IO.Unsafe(unsafePerformIO)
+import Network.HTTP.Date.Types
+import System.IO.Unsafe (unsafePerformIO)
+import System.Posix.Types
 
 {-|
   Translating 'EpochTime' to 'HTTPDate'.
@@ -59,25 +58,35 @@ toYYMMDD x = (yy, mm, dd)
     (months, daysArr) = if isLeap yy
       then (leapMonth, leapDayInMonth)
       else (normalMonth, normalDayInMonth)
-    findMonth n = inlinePerformIO $ liftM2 (,) (peekElemOff months n) (peekElemOff daysArr n)
+    findMonth n = inlinePerformIO $ (,) <$> (peekElemOff months n) <*> (peekElemOff daysArr n)
 
-normalMonth :: Ptr Int
-normalMonth = unsafePerformIO $ newArray $ concat $ zipWith (flip replicate) [1..] normalMonthDays
-
-normalDayInMonth :: Ptr Int
-normalDayInMonth = unsafePerformIO $ newArray $ concatMap (enumFromTo 1) normalMonthDays
-
-leapMonth :: Ptr Int
-leapMonth = unsafePerformIO $ newArray $ concat $ zipWith (flip replicate) [1..] leapMonthDays
-
-leapDayInMonth :: Ptr Int
-leapDayInMonth = unsafePerformIO $ newArray $ concatMap (enumFromTo 1) leapMonthDays
+----------------------------------------------------------------
 
 normalMonthDays :: [Int]
 normalMonthDays = [31,28,31,30,31,30,31,31,30,31,30,31]
 
 leapMonthDays :: [Int]
 leapMonthDays   = [31,29,31,30,31,30,31,31,30,31,30,31]
+
+mkPtrInt :: [Int] -> Ptr Int
+mkPtrInt = unsafePerformIO . newArray . concat . zipWith (flip replicate) [1..]
+
+mkPtrInt2 :: [Int] -> Ptr Int
+mkPtrInt2 = unsafePerformIO . newArray . concatMap (enumFromTo 1)
+
+normalMonth :: Ptr Int
+normalMonth = mkPtrInt normalMonthDays
+
+normalDayInMonth :: Ptr Int
+normalDayInMonth = mkPtrInt2 normalMonthDays
+
+leapMonth :: Ptr Int
+leapMonth = mkPtrInt leapMonthDays
+
+leapDayInMonth :: Ptr Int
+leapDayInMonth = mkPtrInt2 leapMonthDays
+
+----------------------------------------------------------------
 
 toHHMMSS :: Int -> (Int,Int,Int)
 toHHMMSS x = (hh,mm,ss)

@@ -2,8 +2,8 @@
 
 module Network.HTTP.Date.Formatter (formatHTTPDate) where
 
-import Data.ByteString.Internal
 import Data.ByteString.Char8 ()
+import Data.ByteString.Internal
 import Data.Word
 import Foreign.ForeignPtr
 import Foreign.Ptr
@@ -44,7 +44,6 @@ formatHTTPDate hd =
     n = hdMinute hd
     s = hdSecond hd
     w = hdWkday hd
-    
     cpy3 :: Ptr Word8 -> ForeignPtr Word8 -> Int -> IO ()
     cpy3 ptr p o = withForeignPtr p $ \fp ->
       memcpy ptr (fp `plusPtr` o) 3
