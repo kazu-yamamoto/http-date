@@ -9,7 +9,8 @@ Description:            Fast parser and formatter for HTTP Date
 Category:               Network, Web
 Cabal-Version:          >= 1.6
 Build-Type:             Simple
-library
+
+Library
   if impl(ghc >= 6.12)
     GHC-Options:        -Wall -fno-warn-unused-do-bind
   else
@@ -19,8 +20,17 @@ library
                         Network.HTTP.Date.Formatter
                         Network.HTTP.Date.Types
                         Network.HTTP.Date.Parser
-  Build-Depends:        base >= 4 && < 5,
-                        bytestring, array, attoparsec
+  Build-Depends:        base >= 4 && < 5
+                      , array
+                      , attoparsec
+                      , bytestring
+
+Test-Suite test
+  Main-Is:              Test.hs
+  Type:                 exitcode-stdio-1.0
+  HS-Source-Dirs:       test
+  Build-Depends:        base >= 4 && < 5
+
 Source-Repository head
   Type:                 git
-  Location:             git://github.com/kazu-yamamoto/http-date
+  Location:             git clone git://github.com/kazu-yamamoto/http-date

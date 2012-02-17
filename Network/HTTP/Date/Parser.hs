@@ -15,9 +15,9 @@ import Network.HTTP.Date.Types
   Parsing HTTP Date. Currently only RFC1123 style is supported.
 -}
 parseHTTPDate :: ByteString -> Maybe HTTPDate
-parseHTTPDate bs = case feed (parse rfc1123Date bs) "" of
-    Done _ ut -> Just ut
-    _         -> Nothing
+parseHTTPDate bs = case parseOnly rfc1123Date bs of
+    Right ut -> Just ut
+    _        -> Nothing
 
 rfc1123Date :: Parser HTTPDate
 rfc1123Date = do
