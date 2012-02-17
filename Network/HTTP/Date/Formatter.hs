@@ -12,9 +12,11 @@ import Network.HTTP.Date.Types
 
 ----------------------------------------------------------------
 
-{-|
-  Generating HTTP Date in RFC1123 style.
--}
+-- | Generating HTTP Date in RFC1123 style.
+--
+-- >>> formatHTTPDate defaultHTTPDate {hdYear = 1994, hdMonth = 11, hdDay = 15, hdHour = 8, hdMinute = 12, hdSecond = 31, hdWkday = 2}
+-- "Tue, 15 Nov 1994 08:12:31 GMT"
+
 formatHTTPDate :: HTTPDate -> ByteString
 formatHTTPDate hd =
     unsafeCreate 29 $ \ptr -> do

@@ -11,9 +11,12 @@ import Network.HTTP.Date.Types
 
 ----------------------------------------------------------------
 
-{-|
-  Parsing HTTP Date. Currently only RFC1123 style is supported.
--}
+-- |
+-- Parsing HTTP Date. Currently only RFC1123 style is supported.
+--
+-- >>> parseHTTPDate "Tue, 15 Nov 1994 08:12:31 GMT"
+-- Just (HTTPDate {hdYear = 1994, hdMonth = 11, hdDay = 15, hdHour = 8, hdMinute = 12, hdSecond = 31, hdWkday = 2})
+
 parseHTTPDate :: ByteString -> Maybe HTTPDate
 parseHTTPDate bs = case parseOnly rfc1123Date bs of
     Right ut -> Just ut
