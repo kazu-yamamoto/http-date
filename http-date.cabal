@@ -42,4 +42,4 @@ Test-Suite test
 
 Source-Repository head
   Type:                 git
-  Location:             git clone git://github.com/kazu-yamamoto/http-date
+  Location:             git://github.com/kazu-yamamoto/http-date
