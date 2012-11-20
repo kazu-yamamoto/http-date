@@ -5,18 +5,18 @@ module Main where
 import Control.Monad
 import Model
 import Network.HTTP.Date
-import Test.Framework.Providers.DocTest
 import Test.Framework.Providers.HUnit
 import Test.Framework.TH.Prime
 import Test.HUnit
+import Test.DocTest
 
 main :: IO ()
 main = $(defaultMainGenerator)
 
 ----------------------------------------------------------------
 
-doc_test :: DocTests
-doc_test = docTest ["Network/HTTP/Date"] ["-XOverloadedStrings"]
+case_doc_test :: Assertion
+case_doc_test = doctest ["Network/HTTP/Date", "-XOverloadedStrings"]
 
 ----------------------------------------------------------------
 
