@@ -36,7 +36,7 @@ Test-Suite test
                       , old-locale
                       , time
                       , HUnit
-                      , test-framework-doctest
+                      , doctest
                       , test-framework-hunit
                       , test-framework-th-prime
 
