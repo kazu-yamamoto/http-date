@@ -1,5 +1,5 @@
 Name:                   http-date
-Version:                0.0.2
+Version:                0.0.3
 Author:                 Kazu Yamamoto <kazu@iij.ad.jp>
 Maintainer:             Kazu Yamamoto <kazu@iij.ad.jp>
 License:                BSD3
@@ -11,10 +11,7 @@ Cabal-Version:          >= 1.8
 Build-Type:             Simple
 
 Library
-  if impl(ghc >= 6.12)
-    GHC-Options:        -Wall -fno-warn-unused-do-bind
-  else
-    GHC-Options:        -Wall
+  GHC-Options:          -Wall
   Exposed-Modules:      Network.HTTP.Date
   Other-Modules:        Network.HTTP.Date.Converter
                         Network.HTTP.Date.Formatter
@@ -25,20 +22,26 @@ Library
                       , attoparsec
                       , bytestring
 
-Test-Suite test
+Test-Suite spec
   Type:                 exitcode-stdio-1.0
   HS-Source-Dirs:       test
-  Main-Is:              Test.hs
-  Other-Modules:        Model
+  Main-Is:              Spec.hs
+  Other-Modules:        DateSpec
+                        Model
   Build-Depends:        base >= 4 && < 5
                       , bytestring
+                      , hspec
                       , http-date
                       , old-locale
                       , time
-                      , HUnit
-                      , test-framework-doctest
-                      , test-framework-hunit
-                      , test-framework-th-prime
+
+Test-Suite doctests
+  Type:                 exitcode-stdio-1.0
+  HS-Source-Dirs:       test
+  Ghc-Options:          -threaded
+  Main-Is:              doctests.hs
+  Build-Depends:        base
+                      , doctest >= 0.8
 
 Source-Repository head
   Type:                 git
