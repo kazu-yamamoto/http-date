@@ -3,6 +3,7 @@
 module Network.HTTP.Date.Parser (parseHTTPDate) where
 
 import Control.Applicative
+import Control.Monad
 import Data.Attoparsec
 import Data.Attoparsec.Char8
 import Data.ByteString
@@ -25,12 +26,12 @@ parseHTTPDate bs = case parseOnly rfc1123Date bs of
 rfc1123Date :: Parser HTTPDate
 rfc1123Date = do
     w <- wkday
-    string ", "
+    void $ string ", "
     (y,m,d) <- date1
     sp
     (h,n,s) <- time
     sp
-    string "GMT"
+    void $ string "GMT"
     return $ defaultHTTPDate {
         hdYear   = y
       , hdMonth  = m
@@ -68,9 +69,9 @@ sp = () <$ char ' '
 time :: Parser (Int,Int,Int)
 time = do
     h <- digit2
-    char ':'
+    void $ char ':'
     m <- digit2
-    char ':'
+    void $ char ':'
     s <- digit2
     return (h,m,s)
 
