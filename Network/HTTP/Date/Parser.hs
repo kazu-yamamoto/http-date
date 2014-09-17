@@ -4,8 +4,8 @@ module Network.HTTP.Date.Parser (parseHTTPDate) where
 
 import Control.Applicative
 import Control.Monad
-import Data.Attoparsec
-import Data.Attoparsec.Char8
+import Data.Attoparsec.ByteString
+import Data.Attoparsec.ByteString.Char8
 import Data.ByteString
 import Data.Char
 import Network.HTTP.Date.Types
