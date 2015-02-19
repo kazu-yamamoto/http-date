@@ -22,7 +22,7 @@ data HTTPDate = HTTPDate {
   , hdMinute :: !Int
   , hdSecond :: !Int
   , hdWkday  :: !Int
-  } deriving (Eq,Show, Ord)
+  } deriving (Eq, Show, Ord)
 
 {-|
   A default value for 'HTTPDate'.
