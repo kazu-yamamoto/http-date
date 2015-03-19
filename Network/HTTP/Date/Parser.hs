@@ -31,7 +31,9 @@ rfc1123Date = do
     sp
     (h,n,s) <- time
     sp
-    void $ string "GMT"
+    -- RFC 2616 defines GMT only but there are actually ill-formed ones such 
+    -- as "+0000" and "UTC" in the wild.
+    void $ string "GMT" <|> string "+0000" <|> string "UTC"
     return $ defaultHTTPDate {
         hdYear   = y
       , hdMonth  = m
