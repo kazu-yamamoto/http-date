@@ -31,7 +31,7 @@ rfc1123Date = do
     sp
     (h,n,s) <- time
     sp
-    void $ string "GMT"
+    void $ string "GMT" <|> string "+0000" <|> string "UTC"
     return $ defaultHTTPDate {
         hdYear   = y
       , hdMonth  = m
