@@ -1,8 +1,13 @@
 {-# LANGUAGE BangPatterns #-}
-module Network.HTTP.Date.Converter (epochTimeToHTTPDate) where
+module Network.HTTP.Date.Converter ( epochTimeToHTTPDate
+                                   , httpDateToUTC
+                                   , utcToHTTPDate
+                                   ) where
 
 import Control.Applicative
 import Data.ByteString.Internal
+import Data.Time
+import Data.Time.Calendar.WeekDate
 import Data.Word
 import Foreign.Marshal.Array
 import Foreign.Ptr
@@ -34,6 +39,40 @@ epochTimeToHTTPDate x = defaultHTTPDate {
     w = (days + 3) `rem` 7 + 1
     (y,m,d) = toYYMMDD days
     (h,n,s) = toHHMMSS secs
+
+{-|
+  Translating 'HTTPDate' to 'UTCTime'.
+ -}
+httpDateToUTC :: HTTPDate -> UTCTime
+httpDateToUTC x = UTCTime (fromGregorian y m d) (secondsToDiffTime s)
+  where
+    y = fromIntegral $ hdYear x
+    m = hdMonth x
+    d = hdDay x
+    s = fromIntegral $ (rem 24 $ hdHour   x) * 3600
+                     + (rem 60 $ hdMinute x) * 60
+                     + (rem 60 $ hdSecond x)
+
+{-|
+  Translating 'UTCTime' to 'HTTPDate'.
+ -}
+utcToHTTPDate :: UTCTime -> HTTPDate
+utcToHTTPDate x = defaultHTTPDate {
+    hdYear   = fromIntegral y
+  , hdMonth  = m
+  , hdDay    = d
+  , hdHour   = h
+  , hdMinute = n
+  , hdSecond = round s
+  , hdWkday  = fromEnum (w :: Int)
+  }
+  where
+    (y, m, d) = toGregorian day
+    (h, n, s) = ((todHour tod), (todMin tod), (todSec tod))
+    (_, _, w) = toWeekDate day
+    day       = localDay time
+    tod       = localTimeOfDay time
+    time      = utcToLocalTime utc x
 
 toYYMMDD :: Int -> (Int,Int,Int)
 toYYMMDD x = (yy, mm, dd)
