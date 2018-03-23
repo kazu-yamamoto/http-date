@@ -49,9 +49,9 @@ httpDateToUTC x = UTCTime (fromGregorian y m d) (secondsToDiffTime s)
     y = fromIntegral $ hdYear x
     m = hdMonth x
     d = hdDay x
-    s = fromIntegral $ (rem 24 $ hdHour   x) * 3600
-                     + (rem 60 $ hdMinute x) * 60
-                     + (rem 60 $ hdSecond x)
+    s = fromIntegral $ (hdHour   x `rem` 24) * 3600
+                     + (hdMinute x `rem` 60) * 60
+                     + (hdSecond x `rem` 60)
 
 {-|
   Translating 'UTCTime' to 'HTTPDate'.
