@@ -13,7 +13,7 @@ env:
 matrix:
   allow_failures:
     # GHC head cannot not compile QuickCheck at this moment.
-    - env: GHCVER=head
+    - env: CABALVER=head GHCVER=head
 
 # Note: the distinction between `before_install` and `install` is not important.
 before_install:
