@@ -40,9 +40,9 @@ epochTimeToHTTPDate x = defaultHTTPDate {
     (y,m,d) = toYYMMDD days
     (h,n,s) = toHHMMSS secs
 
-{-|
-  Translating 'HTTPDate' to 'UTCTime'.
- -}
+-- | Translating 'HTTPDate' to 'UTCTime'.
+--
+--   Since 0.0.7.
 httpDateToUTC :: HTTPDate -> UTCTime
 httpDateToUTC x = UTCTime (fromGregorian y m d) (secondsToDiffTime s)
   where
@@ -53,9 +53,9 @@ httpDateToUTC x = UTCTime (fromGregorian y m d) (secondsToDiffTime s)
                      + (hdMinute x `rem` 60) * 60
                      + (hdSecond x `rem` 60)
 
-{-|
-  Translating 'UTCTime' to 'HTTPDate'.
- -}
+-- | Translating 'UTCTime' to 'HTTPDate'.
+--
+--   Since 0.0.7.
 utcToHTTPDate :: UTCTime -> HTTPDate
 utcToHTTPDate x = defaultHTTPDate {
     hdYear   = fromIntegral y
