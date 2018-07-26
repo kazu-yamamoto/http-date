@@ -63,7 +63,7 @@ utcToHTTPDate x = defaultHTTPDate {
   , hdDay    = d
   , hdHour   = h
   , hdMinute = n
-  , hdSecond = round s
+  , hdSecond = truncate s
   , hdWkday  = fromEnum (w :: Int)
   }
   where
