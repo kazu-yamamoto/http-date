@@ -4,8 +4,6 @@ module Network.HTTP.Date.Converter ( epochTimeToHTTPDate
                                    , utcToHTTPDate
                                    ) where
 
-import Control.Applicative
-import Data.ByteString.Internal
 import Data.Time
 import Data.Time.Calendar.WeekDate
 import Data.Word
@@ -13,7 +11,7 @@ import Foreign.Marshal.Array
 import Foreign.Ptr
 import Foreign.Storable
 import Network.HTTP.Date.Types
-import System.IO.Unsafe (unsafePerformIO)
+import System.IO.Unsafe (unsafeDupablePerformIO, unsafePerformIO)
 import System.Posix.Types
 
 {-|
@@ -94,10 +92,10 @@ toYYMMDD x = (yy, mm, dd)
     isLeap year = year `rem` 4 == 0
               && (year `rem` 400 == 0 ||
                   year `rem` 100 /= 0)
-    (months, daysArr) = if isLeap yy
+    (mnths, daysArr) = if isLeap yy
       then (leapMonth, leapDayInMonth)
       else (normalMonth, normalDayInMonth)
-    findMonth n = inlinePerformIO $ (,) <$> (peekElemOff months n) <*> (peekElemOff daysArr n)
+    findMonth n = unsafeDupablePerformIO $ (,) <$> (peekElemOff mnths n) <*> (peekElemOff daysArr n)
 
 ----------------------------------------------------------------
 
