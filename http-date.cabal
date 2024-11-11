@@ -31,6 +31,7 @@ Test-Suite spec
   Main-Is:              Spec.hs
   Other-Modules:        DateSpec
                         Model
+  Build-Tool-Depends:   hspec-discover:hspec-discover
   Build-Depends:        base >= 4.9 && < 5
                       , bytestring
                       , hspec
