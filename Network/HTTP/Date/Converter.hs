@@ -71,7 +71,7 @@ utcToHTTPDate x =
         }
   where
     (y, m, d) = toGregorian day
-    (h, n, s) = ((todHour tod), (todMin tod), (todSec tod))
+    (h, n, s) = (todHour tod, todMin tod, todSec tod)
     (_, _, w) = toWeekDate day
     day = localDay time
     tod = localTimeOfDay time
@@ -107,7 +107,7 @@ toYYMMDD x = (yy, mm, dd)
             else (normalMonth, normalDayInMonth)
     findMonth n =
         unsafeDupablePerformIO $
-            (,) <$> (peekElemOff mnths n) <*> (peekElemOff daysArr n)
+            (,) <$> peekElemOff mnths n <*> peekElemOff daysArr n
 
 ----------------------------------------------------------------
 
