@@ -16,16 +16,15 @@ import Network.HTTP.Date.Types
 --
 -- >>> formatHTTPDate defaultHTTPDate {hdYear = 1994, hdMonth = 11, hdDay = 15, hdHour = 8, hdMinute = 12, hdSecond = 31, hdWkday = 2}
 -- "Tue, 15 Nov 1994 08:12:31 GMT"
-
 formatHTTPDate :: HTTPDate -> ByteString
 formatHTTPDate hd =
     unsafeCreate 29 $ \ptr -> do
         cpy3 ptr weekDays (3 * w)
-        poke (ptr `plusPtr`  3) comma
-        poke (ptr `plusPtr`  4) spc
-        int2 (ptr `plusPtr`  5) d
-        poke (ptr `plusPtr`  7) spc
-        cpy3 (ptr `plusPtr`  8) months (3 * m)
+        poke (ptr `plusPtr` 3) comma
+        poke (ptr `plusPtr` 4) spc
+        int2 (ptr `plusPtr` 5) d
+        poke (ptr `plusPtr` 7) spc
+        cpy3 (ptr `plusPtr` 8) months (3 * m)
         poke (ptr `plusPtr` 11) spc
         int4 (ptr `plusPtr` 12) y
         poke (ptr `plusPtr` 16) spc
@@ -48,25 +47,25 @@ formatHTTPDate hd =
     w = hdWkday hd
     cpy3 :: Ptr Word8 -> ForeignPtr Word8 -> Int -> IO ()
     cpy3 ptr p o = withForeignPtr p $ \fp ->
-      memcpy ptr (fp `plusPtr` o) 3
+        memcpy ptr (fp `plusPtr` o) 3
 
 ----------------------------------------------------------------
 
 int2 :: Ptr Word8 -> Int -> IO ()
 int2 ptr n
-  | n < 10 = do
-      poke ptr zero
-      poke (ptr `plusPtr` 1) (i2w8 n)
-  | otherwise = do
-      poke ptr               (i2w8 (n `quot` 10))
-      poke (ptr `plusPtr` 1) (i2w8 (n `rem` 10))
+    | n < 10 = do
+        poke ptr zero
+        poke (ptr `plusPtr` 1) (i2w8 n)
+    | otherwise = do
+        poke ptr (i2w8 (n `quot` 10))
+        poke (ptr `plusPtr` 1) (i2w8 (n `rem` 10))
 
 int4 :: Ptr Word8 -> Int -> IO ()
 int4 ptr n0 = do
-    let (n1,x1) = n0 `quotRem` 10
-        (n2,x2) = n1 `quotRem` 10
-        (x4,x3) = n2 `quotRem` 10
-    poke ptr               (i2w8 x4)
+    let (n1, x1) = n0 `quotRem` 10
+        (n2, x2) = n1 `quotRem` 10
+        (x4, x3) = n2 `quotRem` 10
+    poke ptr (i2w8 x4)
     poke (ptr `plusPtr` 1) (i2w8 x3)
     poke (ptr `plusPtr` 2) (i2w8 x2)
     poke (ptr `plusPtr` 3) (i2w8 x1)

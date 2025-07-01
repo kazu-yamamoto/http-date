@@ -17,79 +17,81 @@ import Network.HTTP.Date.Types
 --
 -- >>> parseHTTPDate "Tue, 15 Nov 1994 08:12:31 GMT"
 -- Just (HTTPDate {hdYear = 1994, hdMonth = 11, hdDay = 15, hdHour = 8, hdMinute = 12, hdSecond = 31, hdWkday = 2})
-
 parseHTTPDate :: ByteString -> Maybe HTTPDate
 parseHTTPDate bs = case parseOnly rfc1123Date bs of
     Right ut -> Just ut
-    _        -> Nothing
+    _ -> Nothing
 
 rfc1123Date :: Parser HTTPDate
 rfc1123Date = do
     w <- wkday
     void $ string ", "
-    (y,m,d) <- date1
+    (y, m, d) <- date1
     sp
-    (h,n,s) <- time
+    (h, n, s) <- time
     sp
-    -- RFC 2616 defines GMT only but there are actually ill-formed ones such 
+    -- RFC 2616 defines GMT only but there are actually ill-formed ones such
     -- as "+0000" and "UTC" in the wild.
     void $ string "GMT" <|> string "+0000" <|> string "UTC"
-    return $ defaultHTTPDate {
-        hdYear   = y
-      , hdMonth  = m
-      , hdDay    = d
-      , hdHour   = h
-      , hdMinute = n
-      , hdSecond = s
-      , hdWkday  = w
-      }
+    return $
+        defaultHTTPDate
+            { hdYear = y
+            , hdMonth = m
+            , hdDay = d
+            , hdHour = h
+            , hdMinute = n
+            , hdSecond = s
+            , hdWkday = w
+            }
 
 wkday :: Parser Int
-wkday = 1 <$ string "Mon"
-    <|> 2 <$ string "Tue"
-    <|> 3 <$ string "Wed"
-    <|> 4 <$ string "Thu"
-    <|> 5 <$ string "Fri"
-    <|> 6 <$ string "Sat"
-    <|> 7 <$ string "Sun"
+wkday =
+    1 <$ string "Mon"
+        <|> 2 <$ string "Tue"
+        <|> 3 <$ string "Wed"
+        <|> 4 <$ string "Thu"
+        <|> 5 <$ string "Fri"
+        <|> 6 <$ string "Sat"
+        <|> 7 <$ string "Sun"
 
-date1 :: Parser (Int,Int,Int)
+date1 :: Parser (Int, Int, Int)
 date1 = do
     d <- day
     sp
     m <- month
     sp
     y <- year
-    return (y,m,d)
- where
-   day = digit2
-   year = digit4
+    return (y, m, d)
+  where
+    day = digit2
+    year = digit4
 
 sp :: Parser ()
 sp = () <$ char ' '
 
-time :: Parser (Int,Int,Int)
+time :: Parser (Int, Int, Int)
 time = do
     h <- digit2
     void $ char ':'
     m <- digit2
     void $ char ':'
     s <- digit2
-    return (h,m,s)
+    return (h, m, s)
 
 month :: Parser Int
-month =  1 <$ string "Jan"
-    <|>  2 <$ string "Feb"
-    <|>  3 <$ string "Mar"
-    <|>  4 <$ string "Apr"
-    <|>  5 <$ string "May"
-    <|>  6 <$ string "Jun"
-    <|>  7 <$ string "Jul"
-    <|>  8 <$ string "Aug"
-    <|>  9 <$ string "Sep"
-    <|> 10 <$ string "Oct"
-    <|> 11 <$ string "Nov"
-    <|> 12 <$ string "Dec"
+month =
+    1 <$ string "Jan"
+        <|> 2 <$ string "Feb"
+        <|> 3 <$ string "Mar"
+        <|> 4 <$ string "Apr"
+        <|> 5 <$ string "May"
+        <|> 6 <$ string "Jun"
+        <|> 7 <$ string "Jul"
+        <|> 8 <$ string "Aug"
+        <|> 9 <$ string "Sep"
+        <|> 10 <$ string "Oct"
+        <|> 11 <$ string "Nov"
+        <|> 12 <$ string "Dec"
 
 digit2 :: Parser Int
 digit2 = do
