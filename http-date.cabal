@@ -50,4 +50,4 @@ Test-Suite doctests
 
 Source-Repository head
   Type:                 git
-  Location:             git://github.com/kazu-yamamoto/http-date
+  Location:             https://github.com/kazu-yamamoto/http-date.git
