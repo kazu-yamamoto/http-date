@@ -137,7 +137,7 @@ jobs:
       run: cabal build ${{ env.target-config }} all
 
     - name: Run tests
-      run: cabal test ${{ env.target-config }} spec
+      run: cabal test ${{ env.target-config }} all
 
     - name: Run doctest
       if: ${{ runner.os == 'Linux' }}
