@@ -75,6 +75,7 @@ jobs:
           echo "paths<<PATHS_EOF"
           cabal path --remote-repo-cache; echo
           cabal path --store-dir; echo
+          cabal path --installdir; echo
           echo "dist-newstyle"
           echo "PATHS_EOF"
         } >> "$GITHUB_OUTPUT"
@@ -109,6 +110,13 @@ jobs:
         done
         exit 1
 
+    - name: Install doctest
+      if: ${{ runner.os == 'Linux' }}
+      shell: bash
+      run: |
+        cabal install --offline --overwrite-policy=always doctest ||
+          cabal install --overwrite-policy=always doctest
+
     # Try the restored store first so a warm run does not talk to Hackage at
     # all, and fall back to fetching when it is cold or incomplete -- with the
     # same retry, for the same reason.
@@ -129,7 +137,12 @@ jobs:
       run: cabal build ${{ env.target-config }} all
 
     - name: Run tests
-      run: cabal test ${{ env.target-config }} all
+      run: cabal test ${{ env.target-config }} spec
+
+    - name: Run doctest
+      if: ${{ runner.os == 'Linux' }}
+      run: |
+        cabal repl --build-depends=QuickCheck --with-repl=doctest ${{ env.target-config }}
 
     # Saved after the build, so the entry holds the build products too, and
     # only from the default branch: a cache written on a branch is visible
